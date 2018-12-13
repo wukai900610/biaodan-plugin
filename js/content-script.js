@@ -8,8 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener("message", function(e) {
         // console.log(e.data);
 
-        chrome.runtime.sendMessage({ greeting: e.data }, function(response) {
-            console.log('收到来自后台的回复'+response);
+        chrome.runtime.sendMessage({ formData: e.data }, function(response) {
+            // console.log('收到来自后台的回复'+response);
         });
     }, false);
 });
