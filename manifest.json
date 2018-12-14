@@ -25,7 +25,7 @@
         ]
     },
     // 浏览器右上角图标设置，browser_action、page_action、app必须三选一
-    // "browser_action": 
+    // "browser_action":
     // {
     // 	"default_icon": "img/icon.png",
     // 	// 图标悬停时的标题，可选
@@ -72,7 +72,7 @@
         "https://*/*" // 可以通过executeScript或者insertCSS访问的网站
     ],
     // 普通页面能够直接访问的插件资源列表，如果不设置是无法直接访问的
-    "web_accessible_resources": ["js/inject.js"]
+    "web_accessible_resources": ["js/inject.js","js/jquery-1.8.3.js"]
     // 插件主页，这个很重要，不要浪费了这个免费广告位
     // "homepage_url": "https://www.baidu.com",
     // 覆盖浏览器默认页面

@@ -23,47 +23,25 @@
 // 	window.sendMessageToContentScriptByEvent = sendMessageToContentScriptByEvent;
 // })();
 
-// function doAjax () {
-//     var param = {
-//         name:'wukai2222',
-//         age:28
-//     }
-
-//     $.ajax({
-//         type:'post',
-//         url:'http://www.phpsite.com/ajax.html',
-//         data:param,
-//         success:function(callback){
-//             // console.log(callback);
-//         }
-//     });
-    
-//     window.postMessage({'funName': param}, '*');
-// }
-// 
 var loopCheck = setInterval(function() {
-    // console.log(main.window.check_data)  
+    // console.log(main.window.check_data)
     if(main.window.check_data){
+        main.window.$ = $;
         main.window.check_data = function () {
             var oForm = main.document.mainform;
-            if (oForm.name.value == "") {
-                alert("请输入学生姓名！"); oForm.name.focus(); return false;
-            }
-            if (oForm.tel.value != "" && main.window.get_num(oForm.tel.value) == '') {
-                alert("请正确输入学生的联系电话！"); oForm.tel.focus(); return false;
-            }
-            /*if (oForm.sex.value == '') {
-                alert("请输入“性别”！"); oForm.sex.focus(); return false;
-            }*/
-            /*if (oForm.media_from.value == '') {
-                alert("请选择“媒体来源”！"); oForm.media_from.focus(); return false;
-            }*/
-            if (oForm.order_date.value.length < 12) {
-                alert("请正确填写“预约时间”！"); oForm.order_date.focus(); return false;
-            }
-                if (oForm.addtime.value == '') {
-                alert("管理员账号必须选择登记时间！"); oForm.addtime.focus(); return false;
-            }
+            // if (oForm.name.value == "") {
+            //     alert("请输入学生姓名！"); oForm.name.focus(); return false;
+            // }
+            // if (oForm.tel.value != "" && main.window.get_num(oForm.tel.value) == '') {
+            //     alert("请正确输入学生的联系电话！"); oForm.tel.focus(); return false;
+            // }
+            //
+            // if (oForm.order_date.value.length < 12) {
+            //     alert("请正确填写“预约时间”！"); oForm.order_date.focus(); return false;
+            // }
+            //     if (oForm.addtime.value == '') {
+            //     alert("管理员账号必须选择登记时间！"); oForm.addtime.focus(); return false;
+            // }
 
             var params={
                 name:oForm.name.value,
@@ -89,49 +67,29 @@ var loopCheck = setInterval(function() {
                 op:oForm.op.value,
                 go:oForm.go.value,
             }
+            var id = oForm.id.value;
+            // console.log(id);
 
-            window.postMessage(params, '*');
-            return true;
+            if(id != ''){//编辑
+                url = '/m/patient/patient.php?op=edit&id'+id+'=&go=back';
+            }else{//新增
+                url = '/m/patient/patient.php?op=add';
+            }
+            $.ajax({
+                type:'post',
+                url:url,
+                data:params,
+                success:function(callback){
+                    var otherId = callback.match(/#(\S*)'/)[1];
+                    params.id = otherId;
+                    window.postMessage(params, '*');
+                    // eval(callback())
+                }
+            });
+            return false;
+            // return true;
         }
 
-        clearInterval(loopCheck);
+        // clearInterval(loopCheck);
     }
-},1000)
-// function check_data() {
-//     console.log('截取')
-//     return false;
-//     var oForm = document.mainform;
-//     if (oForm.name.value == "") {
-//         alert("请输入学生姓名！"); oForm.name.focus(); return false;
-//     }
-//     if (oForm.tel.value != "" && get_num(oForm.tel.value) == '') {
-//         alert("请正确输入学生的联系电话！"); oForm.tel.focus(); return false;
-//     }
-//     if (oForm.sex.value == '') {
-//         alert("请输入“性别”！"); oForm.sex.focus(); return false;
-//     }
-//     /*if (oForm.media_from.value == '') {
-//         alert("请选择“媒体来源”！"); oForm.media_from.focus(); return false;
-//     }*/
-//     if (oForm.order_date.value.length < 12) {
-//         alert("请正确填写“预约时间”！"); oForm.order_date.focus(); return false;
-//     }
-//         if (oForm.addtime.value == '') {
-//         alert("管理员账号必须选择登记时间！"); oForm.addtime.focus(); return false;
-//     }
-
-    
-//     // window.postMessage({'funName': param}, '*');
-//     return false;
-// }
-
-// function doCustomAjax () {
-// 	$.ajax({
-//         type:'post',
-//         url:'http://www.zzcredit.gov.cn/api/content/list.jspx?channelIds=106&first=0&count=5',
-//         data:param,
-//         success:function(callback){
-//             // console.log(callback);
-//         }
-//     });
-// }
+},4000)

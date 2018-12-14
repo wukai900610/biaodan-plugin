@@ -5,11 +5,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // console.log(sender);
     // console.log(sendResponse);
     // console.log('wukai-end');
-    // 
+    //
     var formData = request.formData
 
     // return false;
-    request = {
+    var newRequest = {
 	    POPupilEntryJson:JSON.stringify({
 	        "Province": "320000",
 		    "NAME": formData.name,
@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	        "CONSULTANTCONTENTTYPEID": "dc0ab0d1-def0-44a9-b667-8b4b23a4bdf9",//咨询项目
 	        "CATEGORY": "未回访"
 	    }),
-	    ConsultRemark: formData.memo,//备注
+	    ConsultRemark: formData.memo || '无',//备注
 	    channelIntroducerName: '',
 	    consultantItemName: '',
 	    consultantTypeName: '',
@@ -46,9 +46,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	$.ajax({
         type:'post',
         url:'https://xhedu.xhe.cn/Recruit/Consultation/SubmitConsultationForm?KeyValue=&start=&category=%E6%9C%AA%E5%9B%9E%E8%AE%BF&isDepartment=',
-        data:request,
+        data:newRequest,
         success:function(callback){
-            // console.log(callback);
+            console.log(callback);
+            if(callback.Code == '1'){
+                formData.qq = callback.CID;
+                formData.go = 'back';
+                formData.op = 'edit';
+
+                // 教育添加的id编辑保存到医疗对应数据中
+                $.ajax({
+                    type:'post',
+                    url:'/m/patient/patient.php?op=edit&id'+formData.id+'=&go=back',
+                    data:formData,
+                    success:function(callback){
+                    }
+                });
+            }
         }
     });
 
