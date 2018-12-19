@@ -83,7 +83,14 @@ var loopCheck = setInterval(function() {
                     var otherId = callback.match(/#(\S*)'/)[1];
                     params.id = otherId;
                     window.postMessage(params, '*');
-                    // eval(callback())
+                    // eval(callback());
+
+                    // if (window.parent && window.parent.msg_box) {
+                    //     window.parent.msg_box("资料提交成功",0);
+                    // } else {
+                    //     alert("资料提交成功");
+                    // }
+                    // location='/m/patient/patient.php#'+id;
                 }
             });
             return false;

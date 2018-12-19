@@ -48,20 +48,23 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         url:'https://xhedu.xhe.cn/Recruit/Consultation/SubmitConsultationForm?KeyValue=&start=&category=%E6%9C%AA%E5%9B%9E%E8%AE%BF&isDepartment=',
         data:newRequest,
         success:function(callback){
+            callback = JSON.parse(callback);
             console.log(callback);
             if(callback.Code == '1'){
                 formData.qq = callback.CID;
                 formData.go = 'back';
                 formData.op = 'edit';
 
-                // 教育添加的id编辑保存到医疗对应数据中
-                $.ajax({
-                    type:'post',
-                    url:'/m/patient/patient.php?op=edit&id'+formData.id+'=&go=back',
-                    data:formData,
-                    success:function(callback){
-                    }
-                });
+                setTimeout(function () {
+                    // 教育添加的id编辑保存到医疗对应数据中
+                    $.ajax({
+                        type:'post',
+                        url:'http://www.biaodan.com/m/patient/patient.php?op=edit&id='+formData.id+'&go=back',
+                        data:formData,
+                        success:function(callback){
+                        }
+                    });
+                }, 1000);
             }
         }
     });
