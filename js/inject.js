@@ -25,9 +25,9 @@
 
 var loopCheck = setInterval(function() {
     // console.log(main.window.check_data)
-    if(main.window.check_data){
+    if (main.window.check_data) {
         main.window.$ = $;
-        main.window.check_data = function () {
+        main.window.check_data = function() {
             var oForm = main.document.mainform;
             // if (oForm.name.value == "") {
             //     alert("请输入学生姓名！"); oForm.name.focus(); return false;
@@ -43,54 +43,59 @@ var loopCheck = setInterval(function() {
             //     alert("管理员账号必须选择登记时间！"); oForm.addtime.focus(); return false;
             // }
 
-            var params={
-                name:oForm.name.value,
-                tel:oForm.tel.value,
-                qq:oForm.qq.value,
-                content:oForm.content.value,
-                depart:oForm.depart.value,
-                media_from:oForm.media_from.value,
-                engine:oForm.engine.value,
-                engine_key:oForm.engine_key.value,
-                engine_key_url:oForm.engine_key_url.value,
-                from_site:oForm.from_site.value,
-                is_local:oForm.is_local.value,
-                area:oForm.area.value,
-                hj_loc:oForm.hj_loc.value,
-                order_date:oForm.order_date.value,
-                memo:oForm.memo.value,
-                addtime:oForm.addtime.value,
-                status:oForm.status.value,
-                is_first_ask:oForm.is_first_ask.value,
-                doctor:oForm.doctor.value,
-                id:oForm.id.value,
-                op:oForm.op.value,
-                go:oForm.go.value,
+            var params = {
+                name: oForm.name.value,
+                tel: oForm.tel.value,
+                qq: oForm.qq.value,
+                content: oForm.content.value,
+                depart: oForm.depart.value,
+                media_from: oForm.media_from.value,
+                engine: oForm.engine.value,
+                engine_key: oForm.engine_key.value,
+                engine_key_url: oForm.engine_key_url.value,
+                from_site: oForm.from_site.value,
+                is_local: oForm.is_local.value,
+                area: oForm.area.value,
+                hj_loc: oForm.hj_loc.value,
+                order_date: oForm.order_date.value,
+                memo: oForm.memo.value,
+                addtime: oForm.addtime.value,
+                status: oForm.status.value,
+                is_first_ask: oForm.is_first_ask.value,
+                doctor: oForm.doctor.value,
+                id: oForm.id.value,
+                op: oForm.op.value,
+                go: oForm.go.value,
             }
             var id = oForm.id.value;
             // console.log(id);
 
-            if(id != ''){//编辑
-                url = '/m/patient/patient.php?op=edit&id'+id+'=&go=back';
-            }else{//新增
+            if (id != '') { //编辑
+                url = '/m/patient/patient.php?op=edit&id' + id +
+                    '=&go=back';
+            } else { //新增
                 url = '/m/patient/patient.php?op=add';
             }
             $.ajax({
-                type:'post',
-                url:url,
-                data:params,
-                success:function(callback){
-                    var otherId = callback.match(/#(\S*)'/)[1];
+                type: 'post',
+                url: url,
+                data: params,
+                success: function(callback) {
+                    var otherId = callback.match(
+                        /#(\S*)'/)[1];
                     params.id = otherId;
                     window.postMessage(params, '*');
-                    // eval(callback());
 
-                    // if (window.parent && window.parent.msg_box) {
-                    //     window.parent.msg_box("资料提交成功",0);
-                    // } else {
-                    //     alert("资料提交成功");
-                    // }
-                    // location='/m/patient/patient.php#'+id;
+                    callback = callback.replace(
+                        '<script language=\'javascript\'>',
+                        '');
+                    callback = callback.replace(
+                        'location', 'main.location'
+                    );
+                    callback = callback.replace(
+                        '<\/script>', '');
+                    console.log(callback);
+                    eval(callback)
                 }
             });
             return false;
@@ -99,4 +104,4 @@ var loopCheck = setInterval(function() {
 
         // clearInterval(loopCheck);
     }
-},4000)
+}, 4000)
